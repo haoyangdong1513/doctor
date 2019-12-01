@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+		<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+		 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+	<mapper namespace="com.fh.dao.DoctorDao">
+	<resultMap id="BaseResultMap" type="com.fh.model.Doctor" >
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="AGE" property="age" jdbcType="INTEGER" />
+		<result column="SEX" property="sex" jdbcType="INTEGER" />
+		<result column="IMGURL" property="imgurl" jdbcType="VARCHAR" />
+		<result column="STATUS" property="status" jdbcType="INTEGER" />
+		<result column="TIME" property="time" jdbcType="TIMESTAMP" />
+		<result column="SECTION_ID" property="sectionId" jdbcType="INTEGER" />
+	</resultMap>
+		<!--  <sql id="Base_Column_List" >
+   			 id,name,time
+ 		 </sql> -->
+
+	<select id="queryById" parameterType="Integer" resultType="Doctor">
+		select  * from t_doctor where id = #{id}
+	</select>
+
+	<select id="queryDoctor" parameterType="Doctor" resultType="Doctor">
+		select * from t_doctor where section_id = #{sectionId} limit #{startIndex},#{pageSize}
+	</select>
+
+	<select id="queryCount" parameterType="Doctor" resultType="Integer">
+		select count(*) from t_doctor where section_id = #{sectionId}
+	</select>
+
+	<delete id="deleteDoctor" parameterType="Integer">
+		delete from t_doctor where id=#{id}
+	</delete>
+
+	<delete id="deleteBySectionId" parameterType="Integer">
+		delete from t_doctor where section_id=#{id}
+	</delete>
+
+	<update id="updateDoctor" parameterType="Doctor">
+		update t_doctor
+		<set>
+			<if test="name != null">name=#{name},</if>
+			<if test="age != null">age=#{age},</if>
+			<if test="sex != null">sex=#{sex},</if>
+			<if test="imgurl != null">IMGURL=#{imgurl},</if>
+			<if test="status != null">status=#{status},</if>
+			<if test="time != null">TIME=#{time},</if>
+			<if test="sectionId != null">SECTION_ID=#{sectionId} </if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<insert id="addDoctor" parameterType="Doctor" >
+		<!-- 返回id -->
+		<selectKey keyProperty="id" resultType="java.lang.Integer">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into t_doctor values(#{id},#{name},#{age},#{sex},#{imgurl},#{status},#{time},#{sectionId})
+	</insert>
+
+
+
+
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+		<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+		 "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+	<mapper namespace="com.fh.dao.SectionDao">
+	<resultMap id="BaseResultMap" type="com.fh.model.Section" >
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+	</resultMap>
+		<!--  <sql id="Base_Column_List" >
+   			 id,name,time
+ 		 </sql> -->
+
+	<select id="queryById" parameterType="Integer" resultType="Section">
+		select  * from t_section where id = #{id}
+	</select>
+
+	<select id="querySection" parameterType="Section" resultType="Section">
+		select * from t_section  limit #{startIndex},#{pageSize}
+	</select>
+
+	<select id="queryCount" parameterType="Section" resultType="Integer">
+		select count(*) from t_section
+	</select>
+
+	<delete id="deleteSection" parameterType="Integer">
+		delete from t_section where id=#{id}
+	</delete>
+
+
+	<update id="updateSection" parameterType="Section">
+		update t_section
+		<set>
+			<if test="name != null">name=#{name},</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<insert id="addSection" parameterType="Section" >
+		<!-- 返回id -->
+		<selectKey keyProperty="id" resultType="java.lang.Integer">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+		insert into t_section values(#{id},#{name})
+	</insert>
+
+
+
+
+
+</mapper>
